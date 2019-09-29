@@ -1,0 +1,35 @@
+version: "3.7"
+
+services:
+  api:
+    image: node:8.16-alpine
+    working_dir: /task-tracker-app-api/
+    command: [sh, -c, "npm install && npm start"]
+    networks:
+      - app
+    ports:
+      - "3003:3003"
+    depends_on:
+      - mongo
+    volumes:
+      - .:/task-tracker-app-api/
+
+  mongo:
+    image: mongo:4.0.12-xenial
+    restart: always
+    networks:
+      - app
+  
+  frontend:
+    image: node:8.16-alpine
+    working_dir: /task-tracker-app-frontend/frontend/my-app
+    command: [sh, -c, "npm install && npm start"]
+    networks:
+      - app
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/task-tracker-app-frontend/
+      
+networks:
+  app:
