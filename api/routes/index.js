@@ -6,6 +6,8 @@
 */
 
 const express = require("express");
+const path = require('path');
+
 const router = express.Router();
 
 const ctrlTasks = require("../controllers/tasks");
@@ -27,5 +29,9 @@ router
     .get(ctrlTasks.getTask)
     .put(ctrlTasks.updateTask)
     .delete(ctrlTasks.deleteTask);
+
+router
+    .route("/docs")
+    .get(ctrlTasks.getDocs);
 
 module.exports = router;
