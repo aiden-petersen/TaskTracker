@@ -249,22 +249,60 @@
         <h1 id='introduction'>Introduction</h1>
 <p>Welcome to the TaskTracker API! This API is part of the <a href="https://github.com/aiden-petersen/TaskTracker">TaskTracker</a> personal project. This webpage describes the API and demonstates usage.</p>
 
-<p>The API can be used to retrieve, create and update tasks. Current features include: Tracking tasks and time spend on each task.</p>
+<p>The API can be used to retrieve, create and update tasks. Current features include: Tracking tasks and time spent on each task.</p>
 <h1 id='tasks'>Tasks</h1><h2 id='get-all-tasks'>Get All Tasks</h2>
 <blockquote>
 <p>The request returns JSON structured like this:</p>
 </blockquote>
-<pre class="highlight json tab-json"><code><span class="w">  </span><span class="p">{</span><span class="w">
+<pre class="highlight json tab-json"><code><span class="p">[</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"28-9-2019"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"tasks"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Meeting X"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"startDate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2019-09-28T04:35:00.000Z"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"stopDate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2019-09-28T05:56:00.000Z"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"duration"</span><span class="p">:</span><span class="w"> </span><span class="mi">4860000</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5d91c2eac0bac7013299e708"</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Programming"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"startDate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2019-09-28T06:35:00.000Z"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"stopDate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2019-09-28T06:45:00.000Z"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"duration"</span><span class="p">:</span><span class="w"> </span><span class="mi">600000</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5d91c307c0bac7013299e709"</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">],</span><span class="w">
+    </span><span class="s2">"totalDuration"</span><span class="p">:</span><span class="w"> </span><span class="mi">5460000</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"29-9-2019"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"tasks"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Programming"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"startDate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2019-09-29T04:35:00.000Z"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"stopDate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2019-09-29T04:36:00.000Z"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"duration"</span><span class="p">:</span><span class="w"> </span><span class="mi">60000</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5d91bfa4c6f919010c449442"</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">],</span><span class="w">
+    </span><span class="s2">"totalDuration"</span><span class="p">:</span><span class="w"> </span><span class="mi">60000</span><span class="w">
   </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
 </span></code></pre>
 <p>This endpoint retrieves all completed tasks. Sorted by date and grouped by the day they were started.</p>
 <h3 id='http-request'>HTTP Request</h3>
 <p><code>GET http://localhost:3003/api/tasks</code></p>
 <h2 id='get-a-task'>Get a Task</h2>
 <blockquote>
-<p>The above command returns JSON structured like this:</p>
+<p>The request returns JSON structured like this:</p>
 </blockquote>
 <pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5d91c2eac0bac7013299e708"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Meeting X"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"startDate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2019-09-28T04:35:00.000Z"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"stopDate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2019-09-28T05:56:00.000Z"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"duration"</span><span class="p">:</span><span class="w"> </span><span class="mi">4860000</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>This endpoint gets a specific task.</p>
@@ -284,9 +322,13 @@
 </tbody></table>
 <h2 id='create-a-task'>Create a Task</h2>
 <blockquote>
-<p>The above command returns JSON structured like this:</p>
+<p>The request returns JSON structured like this:</p>
 </blockquote>
 <pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Meeting X"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"startDate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2019-09-28T06:35:00.000Z"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"stopDate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2019-09-28T06:45:00.000Z"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5d91c6ef8d4d970032da8197"</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>This endpoint creates a new task.</p>
@@ -313,13 +355,6 @@
 </tr>
 </tbody></table>
 <h2 id='delete-a-task'>Delete a Task</h2>
-<blockquote>
-<p>The above command returns JSON structured like this:</p>
-</blockquote>
-<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-
-</span><span class="p">}</span><span class="w">
-</span></code></pre>
 <p>This endpoint deletes a specific task.</p>
 <h3 id='http-request-4'>HTTP Request</h3>
 <p><code>DELETE http://localhost:3003/api/tasks/&lt;task_id&gt;</code></p>
