@@ -59,11 +59,11 @@ function getTask(req, res){
                 result.duration = result.stopDate - result.startDate;
                 res.status(200).json(result);
             } else {
-                res.status(400).json({message: "taskid not found"});
+                res.status(404).json({message: "taskid not found"});
             }
         });
     } else {
-        res.status(400).json({message: "taskid not found"});
+        res.status(404).json({message: "taskid not found"});
     }
 }
 
@@ -111,11 +111,11 @@ function deleteTask(req, res){
             if(result.value){
                 res.status(204).json({message: "Task deleted"});
             } else {
-                res.status(400).json({message: "taskid not found"});
+                res.status(404).json({message: "taskid not found"});
             }
         });
     } else {
-        res.status(400).json({message: "taskid not found"});
+        res.status(404).json({message: "taskid not found"});
     }
 }
 
@@ -128,7 +128,7 @@ function getActiveTask(req, res){
         if (result){
             res.status(200).json(result);
         } else {
-            res.status(400).json({message: "no active task found"});
+            res.status(200).json({message: "no active task found"});
         }
     });
 }
@@ -201,6 +201,9 @@ function updateActiveTask(req, res){
     }
 }
 
+function getDocs(req, res){
+    res.sendFile(path.join(__dirname+"/../public/index.html"));
+}
 
 module.exports = {
     getTasksByStartDate,
@@ -210,5 +213,6 @@ module.exports = {
     deleteTask,
     getActiveTask,
     createActiveTask,
-    updateActiveTask
+    updateActiveTask,
+    getDocs
 };
