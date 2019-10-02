@@ -3,8 +3,9 @@ const MongoClient = require('mongodb').MongoClient;
 const ObjectID = require('mongodb').ObjectID;
 const path = require('path');
 
+const mongo_port = process.env.MONGO_PORT;
 // Connect to mongo
-const url = 'mongodb://mongo:27017';
+const url = 'mongodb://mongo:'+mongo_port;
 const dbName = 'task-tracker';
 const client = new MongoClient(url);
 
@@ -12,6 +13,12 @@ client.connect(function(err) {
     assert.equal(null, err);
     console.log("Connected successfully to mongo");
 });
+
+function validateTaskId(req, res, next, taskid){
+    // TODO validate task id
+    console.log("validating task id :"+taskid);
+    next();
+}
 
 // TODO: Need to add a limit to this incase we fill memory when we use toArray
 // TODO: Need to sort this so that it returns in sorted order
@@ -214,5 +221,6 @@ module.exports = {
     getActiveTask,
     createActiveTask,
     updateActiveTask,
-    getDocs
+    getDocs,
+    validateTaskId
 };
