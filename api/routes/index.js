@@ -1,12 +1,21 @@
 const express = require("express");
+const express_jwt = require('express-jwt');
+const fs = require('file-system');
+
+
 const router = express.Router();
 
 const ctrlTasks = require("../controllers/tasks");
-const ctrlAuth = require("../controllers/authentication");
 
-// TODO: update to be part of another service
-router.route("/login").post(ctrlAuth.login);
-router.route("/register").post(ctrlAuth.register);
+if(!process.env.JWT_PUBLIC_PATH)
+{
+    // No secret, we cannot proceed
+    // TODO: need a better way to handle these fatal errors
+    // console.log might not get printed
+    console.log("Error: JWT_PUBLIC_PATH environment variable needs to be set");
+    process.exit(1);
+}
+const public_key = fs.readFileSync(process.env.JWT_PUBLIC_PATH, 'utf8');
 
 // TODO: move docs somewhere else
 router
@@ -15,7 +24,7 @@ router
 
 router
     .route("/tasks")
-    .all(ctrlAuth.auth)
+    .all(express_jwt({secret: public_key}))
     .get(ctrlTasks.getTasksByStartDate)
     .post(ctrlTasks.createTask);
 
@@ -30,7 +39,7 @@ router
 router
     .param('taskid', ctrlTasks.validateTaskId)
     .route("/tasks/:taskid")
-    .all(ctrlAuth.auth)
+    .all(express_jwt({secret: public_key}))
     .get(ctrlTasks.getTask)
     .put(ctrlTasks.updateTask)
     .delete(ctrlTasks.deleteTask);
