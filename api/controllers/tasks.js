@@ -26,7 +26,7 @@ function getTasksByStartDate(req, res) {
     const db = client.db(dbName);
     db.collection('tasks').aggregate([
         { $group: { 
-            _id: { $concat: [ { $toString: { $dayOfMonth: "$startDate" } }, "-", { $toString: { $month: "$startDate" } }, "-", { $toString: { $year: "$startDate" } } ] },
+            _id: { $dateFromString: { dateString: { $dateToString: { date: "$startDate", format: "%Y-%m-%d" } } }},
             tasks: { $push: { title: "$title", startDate: "$startDate", stopDate: "$stopDate", duration: { $subtract: [ "$stopDate", "$startDate" ] }, _id: "$_id" } },
             totalDuration: { $sum: { $subtract: [ "$stopDate", "$startDate" ] } }
             }
