@@ -1,11 +1,4 @@
-const mongoose = require('mongoose')
-
-const mongo_port = process.env.MONGO_PORT;
-const mongo_addr = process.env.MONGO_ADDR;
-const mongo_db_name = "usersV1";
-
-mongoose.connect(`mongodb://${mongo_addr}:${mongo_port}/${mongo_db_name}`, {useNewUrlParser: true});
-require('./userSchema')
+const mongoose = require('mongoose');
 const User = mongoose.model('User');
 
 function register(req, res){
