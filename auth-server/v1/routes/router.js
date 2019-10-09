@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const v1Controller = require('../controllers/v1/authentication')
+const v1Controller = require('../controllers/authentication')
 
 router
     .route('/auth/register')
