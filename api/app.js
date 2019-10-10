@@ -1,6 +1,6 @@
 
 const express = require("express");
-const apiRouter = require("./api/routes/index");
+const apiRouter = require("./routes/index");
 const morgan = require("morgan");
 const bodyParser = require('body-parser');
 const path = require('path');
@@ -21,7 +21,7 @@ app.use("/api", apiRouter);
 // });
 
 // For documentation
-app.use("/api", express.static(path.join(__dirname, 'api/public')));
+app.use("/api", express.static(path.join(__dirname, 'public')));
 
 app.use((err, req, res, next) => {
     if (err.name === 'UnauthorizedError') {
