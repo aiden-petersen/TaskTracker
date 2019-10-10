@@ -1,8 +1,8 @@
-const express = require("express");
+import express from 'express';
+import morgan from 'morgan';
+import bodyParser from 'body-parser';
 require('./v1/models/db');
-const v1Router = require('./v1/routes/router')
-const morgan = require('morgan')
-const bodyParser = require('body-parser');
+import v1Router from './v1/routes/router';
 
 var port = process.env.PORT || 3004;
 

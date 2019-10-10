@@ -1,7 +1,7 @@
-const mongoose = require('mongoose');
-const User = mongoose.model('User');
+import express from 'express';
+import User, { IUser } from '../models/user';
 
-function register(req, res){
+export function register(req: express.Request, res: express.Response){
     if (!req.body.username && !req.body.password){
         res.status(403).json({message: "username and passord not sent"});
     } else {
@@ -9,7 +9,7 @@ function register(req, res){
         user.username = req.body.username;
         user.setPassword(req.body.password);
         
-        user.save(err => {
+        user.save((err: string) => {
             if (err) {
                 res.status(403).json({message: "error", error: err});
             } else {
@@ -19,21 +19,20 @@ function register(req, res){
     }
 }
 
-function login(req, res){
+export function login(req: express.Request , res: express.Response){
     if (!req.body.username && !req.body.password){
         res.status(403).json({message: "username and passord not sent"});
     } else {
-        User.findOne({username: req.body.username}, (err, user) => {
+        User.findOne({username: req.body.username}, (err: string, user: IUser) => {
             if (err) {
                 res.status(403).json({message: "error", error: err});
             } else {
-                res.status(200).json({token: user.generateToken()});
+                if (user.isCorrectPassword(req.body.password)){
+                    res.status(200).json({token: user.generateToken()});
+                } else {
+                    res.status(403).json({message: "incorrect password"});
+                }
             }
         });
     }
-}
-
-module.exports = {
-    register,
-    login
 }
