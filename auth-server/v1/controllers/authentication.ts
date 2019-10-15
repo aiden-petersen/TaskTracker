@@ -1,13 +1,13 @@
 import express from 'express';
+import basic_auth from 'basic-auth';
 import User, { IUser } from '../models/user';
 
 export function register(req: express.Request, res: express.Response){
-    if (!req.body.username && !req.body.password){
-        res.status(403).json({message: "username and passord not sent"});
-    } else {
+    const credentials = basic_auth(req);
+    if (credentials){
         let user = new User();
-        user.username = req.body.username;
-        user.setPassword(req.body.password);
+        user.username = credentials.name;
+        user.setPassword(credentials.pass);
         
         user.save((err: string) => {
             if (err) {
@@ -16,23 +16,26 @@ export function register(req: express.Request, res: express.Response){
                 res.status(201).json({token: user.generateToken()});
             }
         });
+    } else {
+        res.status(403).json({message: "Header basic auth not provided"});
     }
 }
 
 export function login(req: express.Request , res: express.Response){
-    if (!req.body.username && !req.body.password){
-        res.status(403).json({message: "username and passord not sent"});
-    } else {
-        User.findOne({username: req.body.username}, (err: string, user: IUser) => {
+    const credentials = basic_auth(req);
+    if (credentials){
+        User.findOne({username: credentials.name}, (err: string, user: IUser) => {
             if (err) {
                 res.status(403).json({message: "error", error: err});
             } else {
-                if (user.isCorrectPassword(req.body.password)){
+                if (user.isCorrectPassword(credentials.pass)){
                     res.status(200).json({token: user.generateToken()});
                 } else {
                     res.status(403).json({message: "incorrect password"});
                 }
             }
         });
+    } else {
+        res.status(403).json({message: "Header basic auth not provided"});
     }
 }
