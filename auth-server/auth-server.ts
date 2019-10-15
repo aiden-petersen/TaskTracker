@@ -8,10 +8,14 @@ const app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
+app.use(
+  morgan(':method :url :status :res[content-length] - :response-time ms')
+);
 
-app.use("/v1", v1Router);
+app.use('/v1', v1Router);
 
-app.use( (req, res) => { res.status(404).send("Page not found!"); });
+app.use((req, res) => {
+  res.status(404).send('Page not found!');
+});
 
 module.exports = app;

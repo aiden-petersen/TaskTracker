@@ -21,3 +21,8 @@ To update package.json with new dependency
 ```bash
 docker run -v ${PWD}:/node-app/ -w /node-app/ --rm node:8.16-alpine npm install <dependency name> --save
 ```
+
+Fomatting
+```
+npx prettier -c --single-quote --arrow-parens=always  **/*.ts
+```
