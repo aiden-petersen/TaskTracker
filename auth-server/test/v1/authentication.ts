@@ -19,99 +19,98 @@ const request = require('supertest');
     POST  /v1/auth/login    "auth header basic auth not set"                                    should return 403 status
 */
 
-describe("Authentication API", function() {
-    describe("Register", function() {
-        it("Return JWT when passed valid username and password", function(done) { 
-            request(test_app) // this returns a SuperTest object
-            .post('/v1/auth/register')
-            .auth('username', 'password123')
-            .expect('Content-Type', /json/)
-            .expect(201)
-            .end((err: any, res: supertest.Response) => {
-                assert.property(res.body, 'token');
-                if (err) {
-                    return done(err);
-                }
-                done();
-            });
-        });
-        it("Returns 403 when passed existing username and password", function(done) { 
-            request(test_app) // this returns a SuperTest object
-            .post('/v1/auth/register')
-            .auth('username', 'password123')
-            .expect(403)
-            .end((err: any, res: supertest.Response) => {
-                if (err) {
-                    return done(err);
-                }
-                done();
-            });
-        });
-        it("Returns 403 when not passed username and password", function(done) {
-            request(test_app) // this returns a SuperTest object
-            .post('/v1/auth/register')
-            .expect(403)
-            .end((err: any, res: supertest.Response) => {
-                if (err) {
-                    return done(err);
-                }
-                done();
-            });
+describe('Authentication API', function() {
+  describe('Register', function() {
+    it('Return JWT when passed valid username and password', function(done) {
+      request(test_app) // this returns a SuperTest object
+        .post('/v1/auth/register')
+        .auth('username', 'password123')
+        .expect('Content-Type', /json/)
+        .expect(201)
+        .end((err: any, res: supertest.Response) => {
+          assert.property(res.body, 'token');
+          if (err) {
+            return done(err);
+          }
+          done();
         });
     });
-    describe("Login", function() {
-        it("Return JWT when passed existing username and password", function(done) { 
-            request(test_app) // this returns a SuperTest object
-            .post('/v1/auth/login')
-            .auth('username', 'password123')
-            .expect('Content-Type', /json/)
-            .expect(200)
-            .end((err: any, res: supertest.Response) => {
-                assert.property(res.body, 'token');
-                if (err) {
-                    return done(err);
-                }
-                done();
-            });
-        });
-        it("Returns 403 when passed invalid username and valid password", function(done) { 
-            request(test_app) // this returns a SuperTest object
-            .post('/v1/auth/login')
-            .auth('invalidusername', 'password123')
-            .expect(403)
-            .end((err: any, res: supertest.Response) => {
-                if (err) {
-                    return done(err);
-                }
-                done();
-            });
-        });
-        it("Returns 403 when passed valid username and invalid password", function(done) { 
-            request(test_app) // this returns a SuperTest object
-            .post('/v1/auth/login')
-            .auth('username', 'password1234')
-            .expect(403)
-            .end((err: any, res: supertest.Response) => {
-                if (err) {
-                    return done(err);
-                }
-                done();
-            });
-        });
-        it("Returns 403 when not passed username and password", function(done) {
-            request(test_app) // this returns a SuperTest object
-            .post('/v1/auth/login')
-            .expect(403)
-            .end((err: any, res: supertest.Response) => {
-                // TODO: Need a better way to kill mongoose
-                mongoose.connection.close( () => {
-                    if (err) {
-                        return done(err);
-                    }
-                    done();
-                });
-            });
+    it('Returns 403 when passed existing username and password', function(done) {
+      request(test_app) // this returns a SuperTest object
+        .post('/v1/auth/register')
+        .auth('username', 'password123')
+        .expect(403)
+        .end((err: any, res: supertest.Response) => {
+          if (err) {
+            return done(err);
+          }
+          done();
         });
     });
+    it('Returns 403 when not passed username and password', function(done) {
+      request(test_app) // this returns a SuperTest object
+        .post('/v1/auth/register')
+        .expect(403)
+        .end((err: any, res: supertest.Response) => {
+          if (err) {
+            return done(err);
+          }
+          done();
+        });
+    });
+  });
+  describe('Login', function() {
+    it('Return JWT when passed existing username and password', function(done) {
+      request(test_app) // this returns a SuperTest object
+        .post('/v1/auth/login')
+        .auth('username', 'password123')
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .end((err: any, res: supertest.Response) => {
+          assert.property(res.body, 'token');
+          if (err) {
+            return done(err);
+          }
+          done();
+        });
+    });
+    it('Returns 403 when passed invalid username and valid password', function(done) {
+      request(test_app) // this returns a SuperTest object
+        .post('/v1/auth/login')
+        .auth('invalidusername', 'password123')
+        .expect(403)
+        .end((err: any, res: supertest.Response) => {
+          if (err) {
+            return done(err);
+          }
+          done();
+        });
+    });
+    it('Returns 403 when passed valid username and invalid password', function(done) {
+      request(test_app) // this returns a SuperTest object
+        .post('/v1/auth/login')
+        .auth('username', 'password1234')
+        .expect(403)
+        .end((err: any, res: supertest.Response) => {
+          if (err) {
+            return done(err);
+          }
+          done();
+        });
+    });
+    it('Returns 403 when not passed username and password', function(done) {
+      request(test_app) // this returns a SuperTest object
+        .post('/v1/auth/login')
+        .expect(403)
+        .end((err: any, res: supertest.Response) => {
+          // TODO: Need a better way to kill mongoose
+          mongoose.connection.close(() => {
+            if (err) {
+              return done(err);
+            }
+            done();
+          });
+        });
+    });
+  });
 });
-
