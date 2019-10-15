@@ -25,7 +25,7 @@ export function login(req: express.Request , res: express.Response){
     const credentials = basic_auth(req);
     if (credentials){
         User.findOne({username: credentials.name}, (err: string, user: IUser) => {
-            if (err) {
+            if (err || !user) {
                 res.status(403).json({message: "error", error: err});
             } else {
                 if (user.isCorrectPassword(credentials.pass)){
