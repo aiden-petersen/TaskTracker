@@ -1,9 +1,9 @@
 import mongoose from 'mongoose';
-const mongo_port = process.env.MONGO_PORT;
-const mongo_addr = process.env.MONGO_ADDR;
-const mongo_db_name = 'auth';
+const mongoPort = process.env.MONGO_PORT;
+const mongoAddr = process.env.MONGO_ADDR;
+const mongoDbName = 'auth';
 
-const dbURI = `mongodb://${mongo_addr}:${mongo_port}/${mongo_db_name}`;
+const dbURI = `mongodb://${mongoAddr}:${mongoPort}/${mongoDbName}`;
 mongoose.connection.on('connected', () => {
   console.log(`Mongoose connected to ${dbURI}`);
 });
@@ -14,11 +14,11 @@ mongoose.connection.on('disconnected', () => {
   console.log('Mongoose disconnected');
 });
 
-mongoose.connect(`mongodb://${mongo_addr}:${mongo_port}/${mongo_db_name}`, {
+mongoose.connect(`mongodb://${mongoAddr}:${mongoPort}/${mongoDbName}`, {
   useNewUrlParser: true
 });
 
-function mongooseShutdown(msg: String, callback: Function) {
+function mongooseShutdown(msg: string, callback: () => void) {
   mongoose.connection.close(() => {
     console.log(`Mongoose disconnected through ${msg}`);
     callback();
@@ -26,15 +26,15 @@ function mongooseShutdown(msg: String, callback: Function) {
 }
 
 // For nodemon restarts
-process.once('SIGUSR2', function() {
-  mongooseShutdown('nodemon restart', function() {
+process.once('SIGUSR2', () => {
+  mongooseShutdown('nodemon restart', () => {
     process.kill(process.pid, 'SIGUSR2');
   });
 });
 
 // For app termination
-process.on('SIGINT', function() {
-  mongooseShutdown('app termination', function() {
+process.on('SIGINT', () => {
+  mongooseShutdown('app termination', () => {
     process.exit(0);
   });
 });

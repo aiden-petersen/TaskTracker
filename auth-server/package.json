@@ -2,11 +2,12 @@
   "name": "auth-server",
   "version": "0.0.1",
   "description": "Handles users login and register",
-  "main": "build/app.js",
+  "main": "build/src/auth-server.js",
   "scripts": {
-    "test": "mocha 'build/test/**/*.js'",
-    "start": "node build/app.js",
-    "tsc": "tsc"
+    "test": "mocha --exit 'build/test/**/*.js'",
+    "start": "node build/src/auth-server.js",
+    "tsc": "tsc",
+    "lint": "tslint src/**/*.ts test/**/*.ts"
   },
   "author": "",
   "license": "ISC",
@@ -26,6 +27,7 @@
     "@types/basic-auth": "^1.1.2",
     "@types/chai": "^4.2.3",
     "@types/express": "^4.17.1",
+    "@types/jsonwebtoken": "^8.3.5",
     "@types/mocha": "^5.2.7",
     "@types/mongoose": "^5.5.20",
     "@types/morgan": "^1.7.37",
@@ -35,6 +37,8 @@
     "mocha": "^6.2.1",
     "prettier": "1.18.2",
     "supertest": "^4.0.2",
+    "tslint": "^5.20.0",
+    "tslint-config-prettier": "^1.18.0",
     "typescript": "^3.6.4"
   }
 }

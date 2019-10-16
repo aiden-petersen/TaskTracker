@@ -1,11 +1,11 @@
-import express from 'express';
 import basic_auth from 'basic-auth';
+import express from 'express';
 import User, { IUser } from '../models/user';
 
 export function register(req: express.Request, res: express.Response) {
   const credentials = basic_auth(req);
   if (credentials) {
-    let user = new User();
+    const user = new User();
     user.username = credentials.name;
     user.setPassword(credentials.pass);
 
