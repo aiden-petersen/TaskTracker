@@ -11,10 +11,13 @@ h3 {
   font-weight: 900;
 }
 
+.app-body {
+  display: inline-block;
+}
+
 .main-header,
 .completed-tasks {
   width: 800px;
-  margin: 0 auto;
 }
 
 .task-day-header {
@@ -42,3 +45,15 @@ h3 {
 .task-duration {
   float: right;
 }
+
+/**** Navbar ****/
+.navbar {
+  /* background-color: #ccc; */
+}
+
+.navbar-right {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+/****************/

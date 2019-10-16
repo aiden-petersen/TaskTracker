@@ -1,18 +1,25 @@
 import React from "react";
 import { GetAllTasks } from '../services/ApiCaller'
 
-class CompletedTasks extends React.Component {
-    state = {
-        days: null
+type CompletedTasksState = {
+    days: any; // TODO: define type for days
+}
+
+class CompletedTasks extends React.Component<{}, CompletedTasksState> {
+    constructor({ }) {
+        super({})
+        this.state = {
+            days: []
+        }
     }
 
     componentDidMount() {
-        GetAllTasks().then((data) => {
+        GetAllTasks().then((data: any) => { // TODO: define type for data
             this.setState({ days: data })
         });
     };
 
-    formatDuration(duration) {
+    formatDuration(duration: number) {
         return duration / 60000
     }
 
@@ -28,13 +35,13 @@ class CompletedTasks extends React.Component {
                 }
                 <h2>Completed tasks</h2>
                 {this.state.days != null &&
-                    this.state.days.map((group) => {
+                    this.state.days.map((group: any) => { // TODO: define type for group
                         return (
                             <div className="task-section">
                                 <div className="task-day-header">
                                     <div className="day-title">{(new Date(group._id)).toLocaleDateString("en-nz", dateDisplayOptions)}</div>
                                 </div>
-                                {group.tasks.map((task, i) => {
+                                {group.tasks.map((task: any, i: number) => {
                                     return (
                                         <div key={i++} className="task-section-info">
                                             <h4 className="task-title">{task.title}</h4>

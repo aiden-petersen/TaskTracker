@@ -1,9 +1,9 @@
 const api = "http://192.168.0.151:3003/api/";
 
-const http = async (request) => {
+const http = async (request: string) => {
     return new Promise(resolve => {
         fetch(request, {
-            tok: ''
+            // tok: ''
         })
             .then(response => response.json())
             .then(body => {
