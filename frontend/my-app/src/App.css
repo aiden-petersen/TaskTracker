@@ -13,14 +13,32 @@ h3 {
 
 .main-header,
 .completed-tasks {
-  width: 500px;
+  width: 800px;
   margin: 0 auto;
 }
 
-.task-section {
-  margin-bottom: 50px;
+.task-day-header {
+  text-align: left;
+  padding: 10px;
 }
 
-.task-section-info {
+.task-section {
+  margin-bottom: 20px;
+  border: 1px grey solid;
+}
+
+.task-section-info,
+.task-day-header {
   text-align: left;
+  border-bottom: 1px grey solid;
+  padding: 20px;
+}
+
+.task-section-info > * {
+  display: inline-block;
+  margin: 0 20px 0 20px;
+}
+
+.task-duration {
+  float: right;
 }
