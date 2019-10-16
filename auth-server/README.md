@@ -7,6 +7,5 @@ docker run -e JWT_SECRET_PATH=priv_key.pem -v ${PWD}:/node-app/ -w /node-app/ --
 
 Fomatting and Linting
 ```
-npx prettier -c --single-quote --arrow-parens=always test/**/*.ts src/**/*.ts
-npx tslint test/**/*.ts src/**/*.ts
+npm run format
 ```
