@@ -5,18 +5,41 @@ services:
     image: node:8.16-alpine
     working_dir: /task-tracker-app-api/
     command: [sh, -c, "npm install && npm start"]
+    environment:
+      - PORT=${API_PORT}
+      - MONGO_PORT=${MONGO_PORT}
+      - JWT_PUBLIC_PATH
     networks:
       - app
     ports:
-      - "3003:3003"
+      - "${API_PORT}:${API_PORT}"
     depends_on:
       - mongo
     volumes:
       - .:/task-tracker-app-api/
 
+  auth-server:
+    image: node:8.16-alpine
+    working_dir: /task-tracker-app-auth-server/auth-server
+    command: [sh, -c, "npm install && npm start"]
+    environment:
+      - PORT=${AUTH_SERVER_PORT}
+      - MONGO_PORT=${MONGO_PORT}
+      - MONGO_ADDR=${MONGO_ADDR}
+      - JWT_SECRET_PATH
+    networks:
+      - app
+    ports:
+      - "${AUTH_SERVER_PORT}:${AUTH_SERVER_PORT}"
+    depends_on:
+      - mongo
+    volumes:
+      - .:/task-tracker-app-auth-server/
+
   mongo:
     image: mongo:4.0.12-xenial
-    restart: always
+    restart: unless-stopped
+    command: ["mongod", "--port", "${MONGO_PORT}"]
     networks:
       - app
   
@@ -24,12 +47,14 @@ services:
     image: node:8.16-alpine
     working_dir: /task-tracker-app-frontend/frontend/my-app
     command: [sh, -c, "npm install && npm start"]
+    restart: unless-stopped
+    depends_on:
+      - api
     networks:
       - app
     ports:
-      - "3000:3000"
+      - "${REACT_PORT}:${REACT_PORT}"
     volumes:
       - .:/task-tracker-app-frontend/
-      
 networks:
   app:
