@@ -5,7 +5,8 @@ docker build . -f test/Dockerfile -t auth_server_test
 docker run -e JWT_SECRET_PATH=priv_key.pem -v ${PWD}:/node-app/ -w /node-app/ --rm auth_server_test /bin/bash -c  "mongod --fork --logpath /var/log/mongodb.log && npm install && npm run tsc && npm run test"
 ```
 
-Fomatting
+Fomatting and Linting
 ```
-npx prettier -c --single-quote --arrow-parens=always  **/*.ts
+npx prettier -c --single-quote --arrow-parens=always test/**/*.ts src/**/*.ts
+npx tslint test/**/*.ts src/**/*.ts
 ```

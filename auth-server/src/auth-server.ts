@@ -1,8 +1,10 @@
+import bodyParser from 'body-parser';
 import express from 'express';
 import morgan from 'morgan';
-import bodyParser from 'body-parser';
-require('./v1/models/db');
 import v1Router from './v1/routes/router';
+import('./v1/models/db');
+
+const port = process.env.PORT || 3004;
 
 const app = express();
 
@@ -18,4 +20,6 @@ app.use((req, res) => {
   res.status(404).send('Page not found!');
 });
 
-module.exports = app;
+module.exports = app.listen(port, () => {
+  console.log('Auth server started at localhost: ' + port);
+});
