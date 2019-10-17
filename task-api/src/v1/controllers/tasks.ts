@@ -1,20 +1,24 @@
-const assert = require('assert');
-const MongoClient = require('mongodb').MongoClient;
-const ObjectID = require('mongodb').ObjectID;
-const path = require('path');
+import express from 'express';
 
-const mongo_port = process.env.MONGO_PORT;
+import assert from 'assert';
+import {MongoClient, ObjectID} from 'mongodb';
+
 // Connect to mongo
-const url = 'mongodb://mongo:'+mongo_port;
-const dbName = 'task-tracker';
-const client = new MongoClient(url);
+const mongoPort = process.env.MONGO_PORT;
+const mongoAddr = process.env.MONGO_ADDR;
+const mongoDbName = 'tasks';
+
+const dbURI = `mongodb://${mongoAddr}:${mongoPort}/${mongoDbName}`;
+// const url = 'mongodb://mongo:'+mongo_port;
+// const dbName = 'task-tracker';
+const client = new MongoClient(dbURI);
 
 client.connect(function(err) {
     assert.equal(null, err);
     console.log("Connected successfully to mongo");
 });
 
-function validateTaskId(req, res, next, taskid){
+function validateTaskId(req: express.Request, res: express.Response, next: express.NextFunction, taskid: string){
     // TODO validate task id
     console.log("validating task id :"+taskid);
     next();
@@ -22,8 +26,8 @@ function validateTaskId(req, res, next, taskid){
 
 // TODO: Need to add a limit to this incase we fill memory when we use toArray
 // TODO: Need to sort this so that it returns in sorted order
-function getTasksByStartDate(req, res) {
-    const db = client.db(dbName);
+function getTasksByStartDate(req: express.Request, res: express.Response) {
+    const db = client.db(mongoDbName);
     db.collection('tasks').aggregate([
         { $group: { 
             _id: { $dateFromString: { dateString: { $dateToString: { date: "$startDate", format: "%Y-%m-%d" } } }},
@@ -41,10 +45,10 @@ function getTasksByStartDate(req, res) {
 }
 
 // Creates new task in the db and returns the task
-function createTask(req, res){
+function createTask(req: express.Request, res: express.Response){
     if(req.body.title && req.body.start_date && req.body.stop_date) {
         // TODO: need to check that input items are valid
-        const db = client.db(dbName);
+        const db = client.db(mongoDbName);
         db.collection('tasks').insertOne({title: req.body.title, startDate: new Date(req.body.start_date), stopDate: new Date(req.body.stop_date) }, function(err, result) {
             assert.equal(err, null);
             assert.equal(1, result.insertedCount);
@@ -55,12 +59,12 @@ function createTask(req, res){
     }
 }
 
-function getTask(req, res){
-    const db = client.db(dbName);
+function getTask(req: express.Request, res: express.Response){
+    const db = client.db(mongoDbName);
 
     // Task IDs should be 24 characters long in hex
     if(ObjectID.isValid(req.params.taskid) && req.params.taskid.length == 24){
-        db.collection('tasks').findOne({_id: ObjectID(req.params.taskid)}, function(err, result) {
+        db.collection('tasks').findOne({_id: new ObjectID(req.params.taskid)}, function(err, result) {
             assert.equal(err, null);
             if(result){
                 result.duration = result.stopDate - result.startDate;
@@ -75,27 +79,27 @@ function getTask(req, res){
 }
 
 // TODO: This should return the updated task
-function updateTask(req, res){
+function updateTask(req: express.Request, res: express.Response){
     console.log("updating task");
     if(req.body.title || req.body.start_date || req.body.stop_date){
         if(req.body.title) {
             // TODO: need to check that input items are valid
-            const db = client.db(dbName);
-            db.collection('tasks').updateOne({_id: ObjectID(req.params.taskid)},  { $set: { title: req.body.title } } , function(err, result) {
+            const db = client.db(mongoDbName);
+            db.collection('tasks').updateOne({_id: new ObjectID(req.params.taskid)},  { $set: { title: req.body.title } } , function(err, result) {
                 assert.equal(err, null);
             });
         }
         if(req.body.start_date) {
             // TODO: need to check that input items are valid
-            const db = client.db(dbName);
-            db.collection('tasks').updateOne({_id: ObjectID(req.params.taskid)},  { $set: { startDate: new Date(req.body.start_date) } } , function(err, result) {
+            const db = client.db(mongoDbName);
+            db.collection('tasks').updateOne({_id: new ObjectID(req.params.taskid)},  { $set: { startDate: new Date(req.body.start_date) } } , function(err, result) {
                 assert.equal(err, null);
             });
         }
         if(req.body.stop_date) {
             // TODO: need to check that input items are valid
-            const db = client.db(dbName);
-            db.collection('tasks').updateOne({_id: ObjectID(req.params.taskid)},  { $set: { stopDate: new Date(req.body.stop_date) } } , function(err, result) {
+            const db = client.db(mongoDbName);
+            db.collection('tasks').updateOne({_id: new ObjectID(req.params.taskid)},  { $set: { stopDate: new Date(req.body.stop_date) } } , function(err, result) {
                 assert.equal(err, null);
             });
         }
@@ -107,12 +111,12 @@ function updateTask(req, res){
     }
 }
 
-function deleteTask(req, res){
-    const db = client.db(dbName);
+function deleteTask(req: express.Request, res: express.Response){
+    const db = client.db(mongoDbName);
 
     // Task IDs should be 24 characters long in hex
     if(ObjectID.isValid(req.params.taskid) && req.params.taskid.length == 24){
-        db.collection('tasks').findOneAndDelete({_id: ObjectID(req.params.taskid)}, function(err, result) {
+        db.collection('tasks').findOneAndDelete({_id: new ObjectID(req.params.taskid)}, function(err, result) {
             assert.equal(err, null);
             console.log(result);
             if(result.value){
@@ -128,8 +132,8 @@ function deleteTask(req, res){
 
 // Currently, our DB only stores 1 active task
 // This function checks the DB for any active tasks and returns it if it exists
-function getActiveTask(req, res){
-    const db = client.db(dbName);
+function getActiveTask(req: express.Request, res: express.Response){
+    const db = client.db(mongoDbName);
     db.collection("active_task").findOne({}, (err, result) => {
         assert.equal(err, null);
         if (result){
@@ -141,8 +145,8 @@ function getActiveTask(req, res){
 }
 
 // This function creates an active task if one does not already exists, returns error if one exists
-function createActiveTask(req, res){
-    const db = client.db(dbName);
+function createActiveTask(req: express.Request, res: express.Response){
+    const db = client.db(mongoDbName);
     if(req.body.title && req.body.start_date){
         db.collection("active_task").findOne({}, (err, result) => {
             assert.equal(err, null);
@@ -165,26 +169,26 @@ function createActiveTask(req, res){
 // TODO: clean up this function
 // This function updates an active task, this can be the title, the startDate or the stopDate,
 // If stopdate is updated, then the task gets finished and pushed to the completed tasks database
-function updateActiveTask(req, res){
+function updateActiveTask(req: express.Request, res: express.Response){
     if(req.body.title || req.body.start_date || req.body.stop_date){
         // Fist check that there is an active task
-        const db = client.db(dbName);
+        const db = client.db(mongoDbName);
         db.collection("active_task").findOne({}, (err, result) => {
             assert.equal(err, null);
             if (result){
                 if(req.body.title) {
-                    db.collection('active_task').updateOne({_id: ObjectID(result._id)},  { $set: { title: req.body.title } } , function(err, result) {
+                    db.collection('active_task').updateOne({_id: new ObjectID(result._id)},  { $set: { title: req.body.title } } , function(err, result) {
                         assert.equal(err, null);                        
                     });
                 }
                 if(req.body.start_date) {
-                    db.collection('active_task').updateOne({_id: ObjectID(result._id)},  { $set: { startDate: new Date(req.body.start_date) } } , function(err, result) {
+                    db.collection('active_task').updateOne({_id: new ObjectID(result._id)},  { $set: { startDate: new Date(req.body.start_date) } } , function(err, result) {
                         assert.equal(err, null);
                     });
                 }
                 // if stop_date is passed in, this means we need to stop the task and push it through to completed tasks
                 if(req.body.stop_date) {
-                    db.collection('active_task').updateOne({_id: ObjectID(result._id)},  { $set: { stopDate: new Date(req.body.stop_date) } } , function(err, result) {
+                    db.collection('active_task').updateOne({_id: new ObjectID(result._id)},  { $set: { stopDate: new Date(req.body.stop_date) } } , function(err, result) {
                         assert.equal(err, null);
                         db.collection('active_task').findOne({}, (err, result) => {
                             assert.equal(err, null);
@@ -208,10 +212,6 @@ function updateActiveTask(req, res){
     }
 }
 
-function getDocs(req, res){
-    res.sendFile(path.join(__dirname+"/../public/index.html"));
-}
-
 module.exports = {
     getTasksByStartDate,
     getTask,
@@ -221,6 +221,5 @@ module.exports = {
     getActiveTask,
     createActiveTask,
     updateActiveTask,
-    getDocs,
     validateTaskId
 };
