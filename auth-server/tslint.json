@@ -1,0 +1,22 @@
+{
+    "defaultSeverity": "error",
+    "extends": [
+        "tslint:latest",
+        "tslint-config-prettier"
+    ],
+    "jsRules": {},
+    "rules": {
+        "no-console": false,
+        "indent": [true, "spaces", 2],
+        "semicolon": [true, "always"],
+        "quotemark": [true, "single"],
+        "trailing-comma": false,
+        "no-implicit-dependencies": [true, "dev"]
+    },
+    "rulesDirectory": [],
+    "linterOptions": {
+        "exclude": [
+            "node_modules"
+        ]
+    }
+}

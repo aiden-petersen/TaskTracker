@@ -7,7 +7,9 @@
     "test": "mocha --exit 'build/test/**/*.js'",
     "start": "node build/src/auth-server.js",
     "tsc": "tsc",
-    "lint": "tslint src/**/*.ts test/**/*.ts"
+    "prettier": "prettier -c --single-quote --arrow-parens=always test/**/*.ts src/**/*.ts",
+    "lint": "tslint src/**/*.ts test/**/*.ts",
+    "format": "npm run prettier && npm run lint"
   },
   "author": "",
   "license": "ISC",
