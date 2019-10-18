@@ -56,8 +56,8 @@ ENV JWT_PUBLIC_PATH=/tasktracker/pub_key.pem
 RUN npm install
 RUN npm run tsc
 
-ENV PORT=3001
-EXPOSE 3001
+ENV PORT=3000
+EXPOSE 3000
 
 # start mongodb server and start auth server
 CMD mongod --fork --logpath /var/log/mongodb.log && npm start
